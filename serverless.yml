@@ -75,7 +75,11 @@ resources:
         AttributeDefinitions:
           - AttributeName: ad_id
             AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
         KeySchema:
           - AttributeName: ad_id
             KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
