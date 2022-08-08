@@ -5,7 +5,7 @@ provider:
   runtime: python3.8
   region: eu-west-1
   environment:
-    DYNAMODB_MESSAGES_TABLE: ads-db
+    DYNAMODB_ADS_TABLE: ads-table
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -68,18 +68,14 @@ functions:
 
 resources:
   Resources:
-    DynamoChatsMessagesTable:
+    DynamoAdsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_MESSAGES_TABLE}
+        TableName: ${self:provider.environment.DYNAMODB_ADS_TABLE}
         AttributeDefinitions:
-          - AttributeName: chat_id
-            AttributeType: S
-          - AttributeName: ts
+          - AttributeName: ad_id
             AttributeType: S
         KeySchema:
-          - AttributeName: chat_id
+          - AttributeName: ad_id
             KeyType: HASH
-          - AttributeName: ts
-            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
