@@ -1,0 +1,85 @@
+service: ads-web
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: eu-west-1
+  environment:
+    DYNAMODB_MESSAGES_TABLE: ads-db
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_ADS_TABLE}"
+
+functions:
+  get_ads:
+    handler: handler.get_ads
+    events:
+      - http:
+          path: /ads
+          method: get
+  get_add:
+    handler: handler.get_ad
+    events:
+      - http:
+          path: /ads/{ad_id}
+          method: get
+          request:
+            parameters:
+              paths:
+                ad_id: true
+  publish_add:
+    handler: handler.publish_ad
+    events:
+      - http:
+          path: /ads/{ad_id}
+          method: post
+          request:
+            parameters:
+              paths:
+                ad_id: true
+  get_comments:
+    handler: handler.get_comments
+    events:
+      - http:
+          path: /comments/{ad_id}
+          method: get
+          request:
+            parameters:
+              paths:
+                ad_id: true
+  send_comments:
+    handler: handler.send_comment
+    events:
+      - http:
+          path: /comments/{ad_id}
+          method: post
+          request:
+            parameters:
+              paths:
+                ad_id: true
+
+resources:
+  Resources:
+    DynamoChatsMessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_MESSAGES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: chat_id
+            AttributeType: S
+          - AttributeName: ts
+            AttributeType: S
+        KeySchema:
+          - AttributeName: chat_id
+            KeyType: HASH
+          - AttributeName: ts
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
