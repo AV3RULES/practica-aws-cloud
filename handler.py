@@ -6,25 +6,29 @@ from datetime import datetime, timezone
 
 ads_table = boto3.resource('dynamodb').Table(os.environ.get('DYNAMODB_ADS_TABLE'))
 
-def get_comments(event, context):
-    """Return all the comments of an ad
-    :param ad_id: (path parameter) ID of the ad
-    :type ad_id: str
+def get_ads(event, context):
+    """Return all the ads
     :rtype: dict
         return example:
         {
-            "comments": [
-                {   "timestamp": "timestamp",   "user"": "Sir Author the first",   "text": "I bought this product and It is amazing"   },
+            "ads": [
+                {
+                    "ad_id": "e25721ef-f83e-4a67-825d-f00c5de97ae5",
+                    "title": "VX500 300Hz PLA exchangeable"
+                },
+                {
+                    "ad_id": "ddd7f744-ab40-4b46-8dda-dad9c09caa4c",
+                    "title": "New mobile videogame available"
+                }
                 ...
             ]
         }
     """
-    ad_id = event.get('pathParameters', {}).get('ad_id')
-    comments = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
-    if "Items" in comments:
+    ads = ads_table.scan()
+
+    if "Items" in ads:
         body = {
-            "status": 200,
-            'comments': [ {'timestamp': comment['timestamp'], 'user': comment['user'], 'text': comment['text']} for comment in comments["Items"] ],
+            'ads': [ {'ad_id': ad['ad_id'], 'title': ad['title']} for ad in ads["Items"] ],
         }
         response = {
             "statusCode": 200,
@@ -32,9 +36,75 @@ def get_comments(event, context):
         }
     else:
         body = {
-            "status": 404,
+            "title": "Ads not found",
+            "detail": "Ads table must be empty",
+        }
+        response = {
+            "statusCode": 404,
+            "body": json.dumps(body)
+        }
+    return response
+
+def get_add(event, context):
+    """Return an details ad given id
+    :param ad_id: (path parameter) ID of the ad
+    :type ad_id: str
+    :rtype: dict
+        return example:
+        {
+            "ad_id": "e25721ef-f83e-4a67-825d-f00c5de97ae5",
+            "title": "VX500 300Hz PLA exchangeable",
+            "description": "orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "image": "http://s3-us-east-1.amazonaws.com/bucket/img1.png"
+        }
+    """
+    ad_id = event.get('pathParameters', {}).get('ad_id')
+    ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
+    if "Items" in ad:
+        response = {
+            "statusCode": 200,
+            "body": json.dumps(ad)
+        }
+    else:
+        body = {
+            "title": "ad not found",
+            "detail": f"There is no ad for this id {ad_id}"
+        }
+        response = {
+            "statusCode": 404,
+            "body": json.dumps(body)
+        }
+    return response
+
+
+def get_comments(event, context):
+    """Return all the comments of an ad given id
+    :param ad_id: (path parameter) ID of the ad
+    :type ad_id: str
+    :rtype: dict
+        return example:
+        {
+            "comments": [
+                {   "timestamp": "timestamp",   "user"": "Sir Author the first",   "text": "I bought this product and It is amazing"   },
+                {   "timestamp": "timestamp",   "user"": "Author II",   "text": "Good product for this price"   },
+                ...
+            ]
+        }
+    """
+    ad_id = event.get('pathParameters', {}).get('ad_id')
+    ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
+    if "Items" in ad:
+        body = {
+            'comments': [ {ad['comments']} ]
+        }
+        response = {
+            "statusCode": 200,
+            "body": json.dumps(body)
+        }
+    else:
+        body = {
             "title": "comments not found",
-            "detail": f"There are no comments for ad {ad_id}",
+            "detail": f"There are no comments for ad {ad_id}"
         }
         response = {
             "statusCode": 404,
@@ -58,18 +128,19 @@ def send_comment(event, context):
     """
     ad_id = event.get('pathParameters', {}).get('ad_id')
     comment = json.loads(event.get('body', '{}'))
-    ads_table.put_item(
-        Item={
-            'ad_id': ad_id,
-            'timestamp': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
-            'user': comment['user'],
-            'text': comment['text'],
+    ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
+    ad['comments'] += comment
+    ads_table.update_item(
+        Key={
+            'id': ad_id
+        },
+        AttributeUpdates={
+            'comments': ad['comments'],
         }
     )
     body = {
-        "status": 201,
-        "title": "OK",
-        "detail": f"New comment posted into ad {ad_id}",
+        "title": "Created",
+        "detail": f"New comment posted into ad {ad_id}"
     }
     return {
         "statusCode": 201,
