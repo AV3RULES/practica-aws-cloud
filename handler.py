@@ -43,33 +43,33 @@ def get_comments(event, context):
     return response
 
 
-def send_message(event, context):
-    """Send a message into a chat room
-    :param chat_id: (path parameter) ID of the chat
-    :type chat_id: str
-    :param message: (body) new info
-    :type message: dict
-        message example:
+def send_comment(event, context):
+    """Send a comment into an ad
+    :param ad_id: (path parameter) ID of the ad
+    :type ad_id: str
+    :param comment: (body) new info
+    :type comment: dict
+        comment example:
         {
-            "user_id": "user ID of the author",
+            "user": "author of the comment",
             "text": "content written by the user",
         }
     :rtype: SimpleResponse
     """
-    chat_id = event.get('pathParameters', {}).get('chat_id')
-    message = json.loads(event.get('body', '{}'))
-    messages_table.put_item(
+    ad_id = event.get('pathParameters', {}).get('ad_id')
+    comment = json.loads(event.get('body', '{}'))
+    ads_table.put_item(
         Item={
-            'chat_id': chat_id,
-            'ts': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
-            'user_id': message['user_id'],
-            'text': message['text'],
+            'ad_id': ad_id,
+            'timestamp': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
+            'user': comment['user'],
+            'text': comment['text'],
         }
     )
     body = {
         "status": 201,
         "title": "OK",
-        "detail": f"New message posted into chat {chat_id}",
+        "detail": f"New comment posted into ad {ad_id}",
     }
     return {
         "statusCode": 201,
