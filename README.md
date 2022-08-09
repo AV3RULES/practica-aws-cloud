@@ -7,7 +7,9 @@
 ### Api Gateway
 Se ha escogido esta pieza porque une las funciones y las definiciones de API expuestas al cliente manteniendo las ventajas del modelo serverless.
 
-TODO endpoints/swagger
+- import openapi.yaml into https://editor.swagger.io/
+
+*TODO* serverless-openapi-documentation
 
 ### Lambda
 Igualmente se ha escogido este componente para escribir código python y aprovechar las ventajas de eficiencia y flexibilidad serverless de las funciones lambda. Reciben las llamadas del API y actuan como midleware con la base de datos.
@@ -15,7 +17,8 @@ Igualmente se ha escogido este componente para escribir código python y aprovec
 ### DynamoDB
 Finalmente tenemos este almacenamiento clave-valor: escalado automático en función de la carga de su aplicación, precios de pago por uso, facilidad de inicio y una vez más ausencia de servidores que administrar. Además de su sencilla integración con los componentes anteriores. 
 
-TODO: diseño tablas/PK/Campos
+KEY -> ad_id
+VALUE -> Ad info y comentarios
 
 ## Manual de despliegue
 
@@ -26,7 +29,11 @@ TODO: diseño tablas/PK/Campos
 - node.js instalado
 ```console
     sudo apt update
+```
+```console
     sudo apt install nodejs
+```
+```console
     node -v
 ```
     
