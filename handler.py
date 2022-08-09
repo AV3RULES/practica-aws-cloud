@@ -45,7 +45,7 @@ def get_ads(event, context):
         }
     return response
 
-def get_add(event, context):
+def get_ad(event, context):
     """Return an details ad given id
     :param ad_id: (path parameter) ID of the ad
     :type ad_id: str

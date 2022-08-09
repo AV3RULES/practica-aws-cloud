@@ -59,7 +59,7 @@ functions:
             parameters:
               paths:
                 ad_id: true
-  send_comments:
+  send_comment:
     handler: handler.send_comment
     events:
       - http:
