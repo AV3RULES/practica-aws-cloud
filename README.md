@@ -20,26 +20,27 @@ TODO: diseño tablas/PK/Campos
 ## Manual de despliegue
 
 ### Requisitos
-cuenta aws
+- cuenta aws
     https://aws.amazon.com/
-node.js instalado
+
+- node.js instalado
 ```console
     sudo apt update
     sudo apt install nodejs
     node -v
 ```
     
-npm instalado
+- npm instalado
 ```console
     sudo apt install npm
 ```
 
 ### Configuración
-instalar framework de serverless como un modulo global:
+- instalar framework de serverless como un modulo global:
 ```console
     npm install --global serverless
 ```
-cuenta serverless
+- cuenta serverless
 ```console
     serverless
     serverless config credentials --provider aws --key {aws-iam-programatic-access-user-key} --secret {aws-iam-programatic-access-user-secret} -o
@@ -51,11 +52,11 @@ cuenta serverless
 ```
 
 ### Uso
-Crear y obtener anuncios y comentarios utilizando curl:
+- crear y obtener anuncios y comentarios utilizando curl:
 ```console
     curl -X POST https://XXXXXXX.ads-api.us-east-1.amazonaws.com/ads
 ```
 
-utilizando postman:
+- utilizando postman:
     ads-api.postman_collection.json
 
