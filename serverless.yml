@@ -1,4 +1,8 @@
-service: ads-web
+org: av3lino
+app: ads-api
+service: ads-api
+
+frameworkVersion: '3'
 
 provider:
   name: aws

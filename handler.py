@@ -128,6 +128,11 @@ def send_comment(event, context):
     """
     ad_id = event.get('pathParameters', {}).get('ad_id')
     comment = json.loads(event.get('body', '{}'))
+    new_comment = {
+        'user': comment['user'],
+        'timestamp': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
+        "text": comment['text'],
+    }
     ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
     ad['comments'] += comment
     ads_table.update_item(
