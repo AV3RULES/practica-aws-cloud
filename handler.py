@@ -76,6 +76,33 @@ def get_add(event, context):
         }
     return response
 
+def publish_ad(event, context):
+    """publish an ad
+    :param ad_id: (path parameter) ID of the ad
+    :type ad_id: str
+    :param comment: (body) new ad info
+    :type comment: dict
+        comment example:
+        {
+            "ad_id": "e25721ef-f83e-4a67-825d-f00c5de97ae5",
+            "title": "VX500 300Hz PLA exchangeable",
+            "description": "orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "image": "http://s3-us-east-1.amazonaws.com/bucket/img1.png",
+            "comments": []
+        }
+    :rtype: SimpleResponse
+    """
+    ad_id = event.get('pathParameters', {}).get('ad_id')
+    ad = json.loads(event.get('body', '{}'))
+    ads_table.put_item(ad)
+    body = {
+        "title": "Created",
+        "detail": f"New comment posted into ad {ad_id}"
+    }
+    return {
+        "statusCode": 201,
+        "body": json.dumps(body)
+    }
 
 def get_comments(event, context):
     """Return all the comments of an ad given id
@@ -117,7 +144,7 @@ def send_comment(event, context):
     """Send a comment into an ad
     :param ad_id: (path parameter) ID of the ad
     :type ad_id: str
-    :param comment: (body) new info
+    :param comment: (body) new comment
     :type comment: dict
         comment example:
         {
