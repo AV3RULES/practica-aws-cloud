@@ -18,6 +18,7 @@ Igualmente se ha escogido este componente para escribir código python y aprovec
 Finalmente tenemos este almacenamiento clave-valor: escalado automático en función de la carga de su aplicación, precios de pago por uso, facilidad de inicio y una vez más ausencia de servidores que administrar. Además de su sencilla integración con los componentes anteriores. 
 
 KEY -> ad_id
+
 VALUE -> Ad info y comentarios
 
 ## Manual de despliegue
