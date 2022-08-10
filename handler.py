@@ -94,7 +94,7 @@ def publish_ad(event, context):
     """
     ad_id = event.get('pathParameters', {}).get('ad_id')
     ad = json.loads(event.get('body', '{}'))
-    ads_table.put_item(ad)
+    ads_table.put_item(Item=ad)
     body = {
         "title": "Created",
         "detail": f"New comment posted into ad {ad_id}"

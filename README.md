@@ -59,6 +59,10 @@ VALUE -> Ad info y comentarios
 ```console
     serverless deploy
 ```
+si la aplicación no existe en serverless dashboard:
+```console
+    serverless serverless --org=${serverless username}
+```
 
 ### Uso
 - crear y obtener anuncios y comentarios utilizando curl:
@@ -69,3 +73,8 @@ VALUE -> Ad info y comentarios
 - utilizando postman:
     ads-api.postman_collection.json
 
+### Borrado
+Para eliminar los servicios y todas sus partes
+```console
+    serverless remove
+```
