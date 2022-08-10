@@ -53,6 +53,7 @@ def get_ad(event, context):
         return example:
         {
             "ad_id": "e25721ef-f83e-4a67-825d-f00c5de97ae5",
+            "timestamp": "2018-08-20'T'13:20:10*633+0000",
             "title": "VX500 300Hz PLA exchangeable",
             "description": "orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             "image": "http://s3-us-east-1.amazonaws.com/bucket/img1.png"
@@ -97,6 +98,7 @@ def publish_ad(event, context):
     ads_table.put_item(
         Item={
             'ad_id': ad_id,
+            'timestamp': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
             'title': ad['title'],
             'description': ad['description'],
             'image': ad['image'],
