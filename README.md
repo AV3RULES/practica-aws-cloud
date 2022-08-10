@@ -26,6 +26,7 @@ VALUE -> Ad info y comentarios
 ### Requisitos
 - cuenta aws
     https://aws.amazon.com/
+- usuario iam acceso programatico
 
 - node.js instalado
 ```console
