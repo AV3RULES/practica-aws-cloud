@@ -132,7 +132,7 @@ def get_comments(event, context):
     ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
     if "Items" in ad:
         body = {
-            'comments': [ {ad['Items'][0]['comments']} ]
+            'comments': {ad['Items'][0]['comments']}
         }
         response = {
             "statusCode": 200,
@@ -172,15 +172,9 @@ def send_comment(event, context):
     }
     ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
     if "Items" in ad:
-        ad['Items'][0]['comments'].extend(new_comment)
-        ads_table.update_item(
-            Key={
-                'id': ad_id
-            },
-            AttributeUpdates={
-                'comments': ad['Items'][0]['comments'],
-            }
-        )
+        item = ad['Items'][0]
+        item['comments'].extend(new_comment)
+        ads_table.put_item(Item=item)
         body = {
             "title": "Created",
             "detail": f"New comment posted into ad {ad_id}"

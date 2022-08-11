@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "28dfbb44-5a1c-4b5c-89af-deb282c5de91",
+		"name": "ads-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "publish ad",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ad_id\": \"bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf\",\n    \"title\": \"VX500 300Hz PLA exchangeable\",\n    \"description\": \"orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\",\n    \"image\": \"http://s3-us-east-1.amazonaws.com/bucket/img1.png\",\n    \"comments\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://xxxxxxxxxx.execute-api.eu-west-1.amazonaws.com/dev/ads/bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf",
+					"protocol": "https",
+					"host": [
+						"xxxxxxxxxx",
+						"execute-api",
+						"eu-west-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"ads",
+						"bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all ads",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://xxxxxxxxxx.execute-api.eu-west-1.amazonaws.com/dev/ads",
+					"protocol": "https",
+					"host": [
+						"xxxxxxxxxx",
+						"execute-api",
+						"eu-west-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"ads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get ad by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://xxxxxxxxxx.execute-api.eu-west-1.amazonaws.com/dev/ads/bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf",
+					"protocol": "https",
+					"host": [
+						"xxxxxxxxxx",
+						"execute-api",
+						"eu-west-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"ads",
+						"bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send comment by ad id",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": \"author of the comment\",\n    \"text\": \"content written by the user\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://xxxxxxxxxx.execute-api.eu-west-1.amazonaws.com/dev/comments/bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf",
+					"protocol": "https",
+					"host": [
+						"xxxxxxxxxx",
+						"execute-api",
+						"eu-west-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"comments",
+						"bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://xxxxxxxxxx.execute-api.eu-west-1.amazonaws.com/dev/comments/bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf",
+					"protocol": "https",
+					"host": [
+						"xxxxxxxxxx",
+						"execute-api",
+						"eu-west-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"comments",
+						"bb17eb0e-2dda-4c1d-85ad-1ae8f7073eaf"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
