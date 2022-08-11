@@ -107,7 +107,7 @@ def publish_ad(event, context):
     )
     body = {
         "title": "Created",
-        "detail": f"New comment posted into ad {ad_id}"
+        "detail": f"New ad {ad_id} posted into web"
     }
     return {
         "statusCode": 201,
@@ -131,12 +131,9 @@ def get_comments(event, context):
     ad_id = event.get('pathParameters', {}).get('ad_id')
     ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
     if "Items" in ad:
-        body = {
-            'comments': {ad['Items'][0]['comments']}
-        }
         response = {
             "statusCode": 200,
-            "body": json.dumps(body)
+            "body": json.dumps(ad['Items'][0]['comments'])
         }
     else:
         body = {
