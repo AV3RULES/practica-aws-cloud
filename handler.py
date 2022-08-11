@@ -64,7 +64,7 @@ def get_ad(event, context):
     if "Items" in ad:
         response = {
             "statusCode": 200,
-            "body": json.dumps(ad)
+            "body": json.dumps(ad['Items'][0])
         }
     else:
         body = {
@@ -132,7 +132,7 @@ def get_comments(event, context):
     ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
     if "Items" in ad:
         body = {
-            'comments': [ {ad['comments']} ]
+            'comments': [ {ad['Items'][0]['comments']} ]
         }
         response = {
             "statusCode": 200,
@@ -141,7 +141,7 @@ def get_comments(event, context):
     else:
         body = {
             "title": "comments not found",
-            "detail": f"There are no comments for ad {ad_id}"
+            "detail": f"There is no ad for this id {ad_id}"
         }
         response = {
             "statusCode": 404,
@@ -171,20 +171,31 @@ def send_comment(event, context):
         "text": comment['text'],
     }
     ad = ads_table.query(KeyConditionExpression=Key('ad_id').eq(ad_id))
-    ad['comments'] += comment
-    ads_table.update_item(
-        Key={
-            'id': ad_id
-        },
-        AttributeUpdates={
-            'comments': ad['comments'],
+    if "Items" in ad:
+        ad['Items'][0]['comments'].extend(new_comment)
+        ads_table.update_item(
+            Key={
+                'id': ad_id
+            },
+            AttributeUpdates={
+                'comments': ad['Items'][0]['comments'],
+            }
+        )
+        body = {
+            "title": "Created",
+            "detail": f"New comment posted into ad {ad_id}"
         }
-    )
-    body = {
-        "title": "Created",
-        "detail": f"New comment posted into ad {ad_id}"
-    }
-    return {
-        "statusCode": 201,
-        "body": json.dumps(body)
-    }
+        response = {
+            "statusCode": 200,
+            "body": json.dumps(body)
+        }
+    else:
+        body = {
+            "title": "comments not found",
+            "detail": f"There is no ad for this id {ad_id}"
+        }
+        response = {
+            "statusCode": 404,
+            "body": json.dumps(body)
+        }
+    return response
